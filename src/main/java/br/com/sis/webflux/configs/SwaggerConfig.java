@@ -18,7 +18,11 @@ public class SwaggerConfig
   {
     return 
     
-      new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build();
+      new Docket(DocumentationType.SWAGGER_2)
+      						.select()
+      						.apis(RequestHandlerSelectors.basePackage("br.com.sis.webflux.controllers"))
+      						.paths(PathSelectors.any())
+      						.build();
   }
 }
 
