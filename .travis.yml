@@ -2,5 +2,11 @@ language: java
 jdk:
   - oraclejdk8
 
+deploy:
+  provider: heroku
+  api_key:
+    secure: "bugiOAfxIH9rb5AhLpBCsv9Or+6B5HK2l483lGR26N8tkILSRBsm8tWW7xve9cG8tamaOpJ6/3QjbmFRe4Its77mxUQ0/KjUW6wYwZOlCa/+ib2pWjKBj9AjKJoThdAiz831+wOPdadRVOVhRXURg34um/NgytPPW1VwxAFNm9gxKSmMAZ0O0ju2Pmp3Py9+g74KUJQZfzmJDrR9KBgmmT0S0PU4ZCKf+AhLvE51LSV82LOwMCUce5d1CQSrsV4ppza9rcfkoWFaV5RcnlRqVhyR03dgZRoldhlaTWmuITxOJZEV8MFNdGg6APkjzADaIrjWDxCQMS+9o76ekqcFVgqLSCI5avUa24cBOra5NXlG+FkB52NUq45J9sZZcyMJFnM5fOJBYUo0Gv5N7M3sx7CPH289ACwJBY/dD1SMA+i0HqdU4MPdMnm229PStp4UkzP4LjK2hejp7FP/uu8c0mVCqcELqwfCcg7/n9tXE78i3Q9ZfblZ9heepphrs0sQXB7h6h+BOaX0ujc3Ri/qn2amFCzUEz+kATRz7rAN67acJXHP39pCxqCvmcsvkEIjTpv+wU3v4AuVYCZwzjrEwOL9WgZRJcZW0VSIH8NkxudY63q9ULWv3yCj/nO9eXbCPoM2zjpWgBNpIqZa7fzAPpsh6gaqJxfh4tX2kloyC78="
+  app: spring-reactor-webflux-mongodb
+
 script:
 - ./mvnw clean install -B
