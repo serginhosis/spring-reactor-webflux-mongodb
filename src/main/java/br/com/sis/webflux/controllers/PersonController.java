@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,15 +36,20 @@ public class PersonController {
         					.flatMap(p -> Mono.just(ResponseEntity.created(URI.create(request.getRequestURI() + "/" + p.getId()))
         					.build()));
     }
+    
+    @ApiOperation(value="Save a person on database")
+    @PutMapping(value={"/person/{id}"}, consumes={"application/json"})
+    public Mono<ResponseEntity<Person>> modify(@RequestBody Person person, @PathVariable(value="id") @ApiParam(value="Id of person") String id) {
+        return personService.update(person, Mono.just(id))
+        					.flatMap(p -> Mono.just(ResponseEntity.ok(p)))
+        					.defaultIfEmpty(ResponseEntity.notFound().build());
+    }
 
     @ApiOperation(value="Find a person by name")
     @ApiResponses(value={@ApiResponse(response=Person.class, code=200, message="We found a person")})
     @GetMapping(value={"/person/name/{name}"}, produces={"application/json"})
-    public Mono<ResponseEntity<Person>> getPersonByName(@PathVariable(value="name") @ApiParam(value="Name of person") String name) {
-       return personService.findByName(Mono.just(name))
-       					   .map(p -> ResponseEntity.ok(p))
-       					   .defaultIfEmpty(ResponseEntity.notFound().build());
-       					   
+    public Flux<Person> getPersonByName(@PathVariable(value="name") @ApiParam(value="Name of person") String name) {
+       return personService.findByName(Mono.just(name));				   
     }
 
     @ApiOperation(value="Find a person by id")

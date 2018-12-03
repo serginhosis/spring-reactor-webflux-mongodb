@@ -19,9 +19,9 @@ public class PersonService
     return personRepository.save(person);
   }
   
-  public Mono<Person> findByName(Mono<String> name)
+  public Flux<Person> findByName(Mono<String> name)
   {
-    return personRepository.findFirstByName(name);
+    return personRepository.findByNameIgnoreCaseContaining(name);
   }
   
   public Mono<Person> find(Mono<String> id)
@@ -38,5 +38,21 @@ public class PersonService
   public Mono<Void> delete(String id)
   {
     return personRepository.deleteById(id);
+  }
+
+  public Mono<Person> update(Person person, Mono<String> id) 
+  {
+	   Mono<Person> found = personRepository.findById(id)
+		   					.map(foundPerson -> {	foundPerson.setCountry(person.getCountry());
+													foundPerson.setName(person.getName());
+													return foundPerson;});
+	  
+	  Person blocked = found.block();
+	  if(blocked !=null && blocked.getId() !=null && !blocked.getId().isEmpty())
+	  {
+		  return personRepository.save(blocked);
+	  }
+	  
+	  return found;
   }
 }
