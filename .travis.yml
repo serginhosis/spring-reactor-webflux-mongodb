@@ -1,5 +1,34 @@
 language: java
 jdk:
   - oraclejdk8
-script:
-- ./mvnw clean install -B
+image: maven:latest
+
+stages:
+  - build
+  - test
+  - run
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS compile package
+
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+
+run:
+  stage: run
+  script:
+    - mvn $MAVEN_CLI_OPTS package
+    - mvn $MAVEN_CLI_OPTS exec:java -jar pring-reactor-webflux-mongodb*.jar
