@@ -1,10 +1,12 @@
 package br.com.sis.webflux.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import br.com.sis.webflux.documents.Person;
+import br.com.sis.webflux.documents.PersonEvents;
 import br.com.sis.webflux.service.PersonService;
 import reactor.core.publisher.Mono;
 
@@ -36,6 +38,14 @@ public class PersonHandler {
 		String id = request.pathVariable("id");
 		return ServerResponse.ok()
 							 .body(personService.find(Mono.just(id)), Person.class)
+							 .doOnError(throwable -> new IllegalStateException());
+	}
+	
+	public Mono<ServerResponse> findPersonEvents(ServerRequest request){
+		String id = request.pathVariable("id");
+		return ServerResponse.ok()
+							 .contentType(MediaType.TEXT_EVENT_STREAM)
+							 .body(personService.streams(id), PersonEvents.class)
 							 .doOnError(throwable -> new IllegalStateException());
 	}
 
