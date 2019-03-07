@@ -1,5 +1,7 @@
 package br.com.sis.webflux.documents;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty.AccessMode;
+
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -46,10 +48,10 @@ public class Person
     return this.country;
   }
   
-  @ApiModelProperty(readOnly=true)
+  @ApiModelProperty(accessMode = AccessMode.READ_ONLY)
   public String getSayHello()
   {
-    return String.format("I'm  %s, %s", new Object[] { getName(), getCountry().getValue() });
+    return String.format("I'm  %s, %s", getName(), getCountry().getValue());
   }
   
   public String toString()
